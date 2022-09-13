@@ -35,6 +35,8 @@
 // this is an attempt without using middle. big mistake
 #include <stdio.h>
 
+int create_triangle(int, int, char *, int *, int *, int);
+
 int main()
 {
     int number;
@@ -46,7 +48,6 @@ int main()
         printf("ERROR!");
         return 0;
     }
-    
 
     isEven = number % 2 == 0;
     if (isEven)
@@ -61,57 +62,53 @@ int main()
     int margin_start = 0, margin_end = column - 1;
     int column_index = 0, bottom_half_index = 0, top_half_index = 0;
 
-    for (int i = 0; i < column * row; i++)
-    {
-        if (column_index == margin_start || column_index == margin_end)
-            bottom_half[bottom_half_index] = '*';
-        else
-            bottom_half[bottom_half_index] = '-';
-
-        column_index++;
-        bottom_half_index++;
-
-        if ((i + 1) % column == 0)
-        {
-            margin_start++;
-            margin_end--;
-
-            bottom_half[bottom_half_index] = '\n';
-            bottom_half_index++;
-
-            column_index = 0;
-        }
-    }
-    bottom_half[bottom_half_index] = '\0';
+    create_triangle(column, row, bottom_half, &margin_start, &margin_end, 1);
 
     margin_start--;
     margin_end++;
 
-    for (int i = isEven ? 0 : column; i < column * row; i++)
+    create_triangle(column, row, top_half, &margin_start, &margin_end, isEven);
+
+    printf("%s", top_half);
+    printf("%s", bottom_half);
+
+    return 0;
+}
+
+int create_triangle(int column, int row, char *str, int *margin_start, int *margin_end, int required_first_line)
+{
+    int column_index = 0, array_index = 0;
+
+    for (int i = required_first_line ? 0 : column; i < column * row; i++)
     {
-        if (column_index == margin_start || column_index == margin_end)
-            top_half[top_half_index] = '*';
+        if (column_index == *margin_start || column_index == *margin_end)
+        {
+            str[array_index] = '*';
+        }
         else
-            top_half[top_half_index] = '-';
+        {
+            str[array_index] = '-';
+        }
 
         column_index++;
-        top_half_index++;
+        array_index++;
 
-        if ((i + 1) % column == 0)
+        if (column_index % column == 0)
         {
-            margin_start++;
-            margin_end--;
+            // this doesn't work as intented
+            // *margin_start++;
+            // *margin_end--;
 
-            top_half[top_half_index] = '\n';
-            top_half_index++;
+            *margin_start = *margin_start + 1;
+            *margin_end = *margin_end - 1;
+
+            str[array_index] = '\n';
+            array_index++;
 
             column_index = 0;
         }
     }
-    top_half[top_half_index] = '\0';
-
-    printf("%s", top_half);
-    printf("%s", bottom_half);
+    str[array_index] = '\0';
 
     return 0;
 }
