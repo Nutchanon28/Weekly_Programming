@@ -29,7 +29,7 @@ int isEven(char number[100])
 int main()
 {
     char number[100];
-    scanf("%[0-cd9-]s", number);
+    scanf("%[0-9-]s", number);
 
     if (isEven(number))
     {
