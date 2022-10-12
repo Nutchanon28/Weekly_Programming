@@ -114,7 +114,7 @@ int main()
             printf("%c", bit_to_base64_char(old_remainder));
             // printf("%s\n", old_remainder);
         }
-        if (i == strlen(str) - 1)
+        if (i == strlen(str) - 1 && remainder != 6)
         {
             char base64_bit[7] = {'0', '0', '0', '0', '0', '0', '\0'};
             for (int i = 0; i < remainder; i++)
